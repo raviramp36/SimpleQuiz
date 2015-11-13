@@ -67,12 +67,15 @@ public class DaoUser {
 
     public User getUser(String login) {
 
+        String[] columns = {"id", "login", "password"};
         Cursor cursor = null;
         User user = null;
+
+        String[] whereArgs = new String[] {login};
+
         try {
-
-            cursor = database.rawQuery("select * from users where login = '" + login + "'", null);
-
+            //cursor = database.rawQuery("select * from users where login = '" + login + "'", null);
+            cursor = database.query("users", columns, "where login = ?", whereArgs, null, null, null);
             if (cursor.getCount() > 0) {
 
                 cursor.moveToFirst();
@@ -82,10 +85,13 @@ public class DaoUser {
             }
 
             return user;
-        } finally {
-
-            cursor.close();
+        } catch(Exception e){
+        e.printStackTrace();//finally {
+            return null;
         }
+
+         //   cursor.close();
+       // }
     }
 
     public boolean checkUser(String login) {

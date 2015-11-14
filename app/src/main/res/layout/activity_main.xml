@@ -15,7 +15,8 @@
             android:text="Logout"
             android:id="@+id/btnLogout"
             android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_alignStart="@+id/buttonAddQ"
+            android:layout_alignEnd="@+id/tvLogged" />
 
         <Button
             android:layout_width="wrap_content"
@@ -24,8 +25,8 @@
             android:id="@+id/btnStart"
             android:layout_marginTop="74dp"
             android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/button"
-            android:layout_alignEnd="@+id/tvLogged" />
+            android:layout_alignStart="@+id/buttonAddQ"
+            android:layout_alignEnd="@+id/buttonAddQ" />
 
         <TextView
             android:layout_width="wrap_content"

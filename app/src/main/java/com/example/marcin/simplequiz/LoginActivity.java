@@ -53,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
     //mLoginFormView = findViewById(R.id.login_form);
     //mProgressView = findViewById(R.id.login_progress);
 
+    //TODO: Add email to database with automaticly sended information with thanks for the installation.
     public void attemptLogin() {
 
         mEmailView.setError(null);

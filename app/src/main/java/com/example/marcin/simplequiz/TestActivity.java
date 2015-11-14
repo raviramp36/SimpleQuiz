@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -55,21 +56,35 @@ public class TestActivity extends AppCompatActivity {
 
         listOfQuestions = daoQuestion.findAll();
 
-        Collections.shuffle(listOfQuestions);
-        listOfAnswers = new ArrayList<>();
+        if(listOfQuestions.size() != 0) {
+            Collections.shuffle(listOfQuestions);
+            listOfAnswers = new ArrayList<>();
 
-        listOfAnswers.add(listOfQuestions.get(iterator).getCorrectAnswer());
-        listOfAnswers.add(listOfQuestions.get(iterator).getIncorrAns1());
-        listOfAnswers.add(listOfQuestions.get(iterator).getIncorrAns2());
-        listOfAnswers.add(listOfQuestions.get(iterator).getIncorrAns3());
+            listOfAnswers.add(listOfQuestions.get(iterator).getCorrectAnswer());
+            listOfAnswers.add(listOfQuestions.get(iterator).getIncorrAns1());
+            listOfAnswers.add(listOfQuestions.get(iterator).getIncorrAns2());
+            listOfAnswers.add(listOfQuestions.get(iterator).getIncorrAns3());
 
-        Collections.shuffle(listOfAnswers);
-        tv.setText(listOfQuestions.get(iterator).getQuestion());
+            Collections.shuffle(listOfAnswers);
+            tv.setText(listOfQuestions.get(iterator).getQuestion());
 
-        btn1.setText(listOfAnswers.get(0));
-        btn2.setText(listOfAnswers.get(1));
-        btn3.setText(listOfAnswers.get(2));
-        btn4.setText(listOfAnswers.get(3));
+            btn1.setText(listOfAnswers.get(0));
+            btn2.setText(listOfAnswers.get(1));
+            btn3.setText(listOfAnswers.get(2));
+            btn4.setText(listOfAnswers.get(3));
+
+            btn1.setEnabled(true);
+            btn2.setEnabled(true);
+            btn3.setEnabled(true);
+            btn4.setEnabled(true);
+
+        } else {
+            Toast.makeText(this, "There is no question now!", Toast.LENGTH_LONG).show();
+            btn1.setEnabled(false);
+            btn2.setEnabled(false);
+            btn3.setEnabled(false);
+            btn4.setEnabled(false);
+        }
 
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,10 +124,14 @@ public class TestActivity extends AppCompatActivity {
         if(corrAnsw.equals(string)){
             iterator += 1;
 
+            Toast.makeText(this, "Good job bro!", Toast.LENGTH_LONG).show();
+
             if(iterator >= listOfQuestion.size()){
                 iterator = 0;
             }
 
+        } else {
+            Toast.makeText(this, "Next time bro...", Toast.LENGTH_LONG).show();
         }
 
         listOfAnswers.add(listOfQuestions.get(iterator).getCorrectAnswer());

@@ -11,12 +11,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.sql.SQLException;
-import java.util.List;
 
 import dao.DaoUser;
 import model.User;
 
 public class LoginActivity extends AppCompatActivity {
+
+    public static final User LOGGED_USER = new User();
 
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
@@ -101,28 +102,16 @@ public class LoginActivity extends AppCompatActivity {
         } else {
 
             if (!daoUser.checkUser(email)) {
-
-                //TODO: Change to search in database for one user not for all and next search whole list...
-                User userToLogin = new User();
-                List<User> listOfUsers = daoUser.findAll();
-                for (int i = 0; i < listOfUsers.size(); i++) {
-                    if(listOfUsers.get(i).getLogin().equals(email)){
-                        userToLogin.setLogin(listOfUsers.get(i).getLogin());
-                        userToLogin.setPassword(listOfUsers.get(i).getPassword());
-                    }
-                }
-
-                Toast.makeText(this, "Successfull loged in.", Toast.LENGTH_LONG).show();
-
+                User userToLogin = daoUser.getUser(email);
                 if(userToLogin.getPassword().equals(user.getPassword())){
                     Intent intentMain = new Intent(LoginActivity.this,
                             MainActivity.class);
+                    intentMain.putExtra("user", userToLogin);
                     LoginActivity.this.startActivity(intentMain);
+                    Toast.makeText(this, "Successfull loged in.", Toast.LENGTH_LONG).show();
                 }else{
-                    Toast.makeText(this, "Wrong password or login.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Wrong login or password.", Toast.LENGTH_LONG).show();
                 }
-
-
             }else{
                 Toast.makeText(this, "There is no user registered with that login.", Toast.LENGTH_LONG).show();
             }
@@ -206,5 +195,6 @@ public class LoginActivity extends AppCompatActivity {
         //TODO: Replace this with your own logic
         return password.length() > 4;
     }
+
 }
 

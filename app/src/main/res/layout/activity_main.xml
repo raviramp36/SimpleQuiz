@@ -9,31 +9,40 @@
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal">
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Logout"
+            android:id="@+id/btnLogout"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/start_quiz"
+            android:id="@+id/btnStart"
+            android:layout_marginTop="74dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/button"
+            android:layout_alignEnd="@+id/tvLogged" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="ASDF"
-            android:id="@+id/textView"
-            android:layout_marginTop="43dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/logged_as"
+            android:id="@+id/tvLogged"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Start"
-            android:id="@+id/btnStart"
-            android:layout_centerVertical="true"
-            android:layout_toStartOf="@+id/textView" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Logout"
-            android:id="@+id/btnLogout"
-            android:layout_alignTop="@+id/btnStart"
-            android:layout_toEndOf="@+id/textView" />
-
+            android:text="@string/add_question"
+            android:id="@+id/buttonAddQ"
+            android:layout_below="@+id/btnStart"
+            android:layout_centerHorizontal="true" />
     </RelativeLayout>
+
 </LinearLayout>

@@ -10,4 +10,10 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
+    <string name="logged_as">Logged as: </string>
+    <string name="add_question">Add question</string>
+    <string name="start_quiz">Start</string>
+    <string name="enter_question">Enter question</string>
+    <string name="enter_corrans">Enter correct answer</string>
+    <string name="enter_incorransw">Enter incorrect answer</string>
 </resources>

@@ -45,7 +45,6 @@ public class AddQActivity extends AppCompatActivity {
             public void onClick(View view) {
                 addQuestion();
 
-
             }
         });
     }
@@ -90,6 +89,9 @@ public class AddQActivity extends AppCompatActivity {
             focusView.requestFocus();
 
         }else{
+
+
+
             question.setQuestion(text[0]);
             question.setCorrectAnswer(text[1]);
             question.setIncorrAns1(text[2]);

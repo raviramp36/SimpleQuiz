@@ -41,8 +41,8 @@ public class DaoQuestion {
         values.put(allColumns[1], question.getQuestion());
         values.put(allColumns[2], question.getCorrectAnswer());
         values.put(allColumns[3], question.getIncorrAns1());
-        values.put(allColumns[4], question.getIncorrAns1());
-        values.put(allColumns[5], question.getIncorrAns1());
+        values.put(allColumns[4], question.getIncorrAns2());
+        values.put(allColumns[5], question.getIncorrAns3());
         try {
             database.insert("test", null, values);
             return true;
@@ -62,9 +62,8 @@ public class DaoQuestion {
             question.setQuestion(cursor.getString(1));
             question.setCorrectAnswer(cursor.getString(2));
             question.setIncorrAns1(cursor.getString(3));
-            question.setIncorrAns1(cursor.getString(4));
-            question.setIncorrAns1(cursor.getString(5));
-            question.setIncorrAns1(cursor.getString(6));
+            question.setIncorrAns2(cursor.getString(4));
+            question.setIncorrAns3(cursor.getString(5));
             questions.add(question);
         }
         return questions;

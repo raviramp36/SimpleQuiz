@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         tvLogged.setText("Logged as: " + user.getLogin());
         Button btnAddQ = (Button)findViewById(R.id.buttonAddQ);
         Button btnLogut = (Button)findViewById(R.id.btnLogout);
+        Button btnStart = (Button)findViewById(R.id.btnStart);
 
         btnAddQ.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,6 +40,21 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        btnStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intentMain = new Intent(MainActivity.this,
+                        TestActivity.class);
+                intentMain.putExtra("user", user);
+                MainActivity.this.startActivity(intentMain);
+
+
+            }
+        });
+
+
 
         btnLogut.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -9,14 +9,25 @@ public class User implements Serializable{
 
     private int id;
     private String login;
+    private String email;
     private String password;
+    private int score;
 
     public User() {
     }
 
-    public User(String login, String password) {
+    public User(String login, String email, String password) {
         this.login = login;
+        this.email = email;
         this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getLogin() {
@@ -41,5 +52,14 @@ public class User implements Serializable{
 
     public void setId(int id) {
         this.id = id;
+    }
+
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 }

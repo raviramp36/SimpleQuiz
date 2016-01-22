@@ -22,8 +22,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         user = (User)getIntent().getSerializableExtra("user");
+
+        int score = user.getScore();
         TextView tvLogged = (TextView)findViewById(R.id.tvLogged);
-        tvLogged.setText("Logged as: " + user.getLogin());
+        tvLogged.setText("Logged as: " + user.getLogin() + " \nScore:" + score);
         Button btnAddQ = (Button)findViewById(R.id.buttonAddQ);
         Button btnLogut = (Button)findViewById(R.id.btnLogout);
         Button btnStart = (Button)findViewById(R.id.btnStart);
@@ -36,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
                         AddQActivity.class);
                 intentMain.putExtra("user", user);
                 MainActivity.this.startActivity(intentMain);
-
 
             }
         });

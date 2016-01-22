@@ -14,9 +14,10 @@
             android:layout_height="wrap_content"
             android:text="Logout"
             android:id="@+id/btnLogout"
-            android:layout_centerVertical="true"
-            android:layout_alignStart="@+id/buttonAddQ"
-            android:layout_alignEnd="@+id/tvLogged" />
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/tvLogged"
+            android:layout_marginBottom="136dp"
+            android:layout_alignEnd="@+id/buttonAddQ" />
 
         <Button
             android:layout_width="wrap_content"

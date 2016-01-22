@@ -10,6 +10,7 @@ import android.util.Log;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
 
 import dbHelper.DbManager;
 import model.User;
@@ -39,7 +40,9 @@ public class DaoUser {
     public Boolean createUser(User user) {
         ContentValues values = new ContentValues();
         values.put("login", user.getLogin());
+        values.put("email", user.getEmail());
         values.put("password", user.getPassword());
+        values.put("score", 0);
         try {
 //            database.insertOrThrow("users", null, values);
             database.insert("users", null, values);
@@ -53,13 +56,14 @@ public class DaoUser {
 
     public List<User> findAll() {
         List<User> words = new LinkedList<User>();
-        String[] columns = {"id", "login", "password"};
+        String[] columns = {"id", "login", "email", "password"};
         Cursor cursor = database.query("users", columns, null, null, null, null, null);
         while (cursor.moveToNext()) {
             User word = new User();
             word.setId(cursor.getInt(0));
             word.setLogin(cursor.getString(1));
-            word.setPassword(cursor.getString(2));
+            word.setEmail(cursor.getString(2));
+            word.setPassword(cursor.getString(3));
             words.add(word);
         }
         return words;
@@ -67,7 +71,7 @@ public class DaoUser {
 
     public User getUser(String login) {
 
-        String[] columns = {"id", "login", "password"};
+        String[] columns = {"id", "login", "email", "password", "score"};
         Cursor cursor = null;
         User user = new User();
 
@@ -81,7 +85,9 @@ public class DaoUser {
                 cursor.moveToFirst();
                 user.setId(cursor.getInt(0));
                 user.setLogin(cursor.getString(1));
-                user.setPassword(cursor.getString(2));
+                user.setEmail(cursor.getString(2));
+                user.setPassword(cursor.getString(3));
+                user.setScore(cursor.getInt(4));
             }
 
             return user;
@@ -91,6 +97,22 @@ public class DaoUser {
 
 
        // }
+    }
+
+    public boolean updateUserScore(User user){
+        try {
+            String[] columns = {"id", "login", "email", "password", "score"};
+            ContentValues cv = new ContentValues();
+            cv.put(columns[0], user.getId());
+            cv.put(columns[1], user.getLogin());
+            cv.put(columns[2], user.getEmail());
+            cv.put(columns[3], user.getPassword());
+            cv.put(columns[4], user.getScore());
+            database.update("users", cv, "id="+user.getId(), null);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
 
     public boolean checkUser(String login) {

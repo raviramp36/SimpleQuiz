@@ -3,6 +3,7 @@ package dao;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.CursorJoiner;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -51,6 +52,28 @@ public class DaoQuestion {
             e.printStackTrace();
             return false;
         }
+    }
+
+    //ToDO: Create method to get count of questions
+    public int getRowCount(){
+        //database.beginTransaction();
+        //database.execSQL("select count(*) from test");
+
+        //Tymczasowo
+        List<Question> questions = new LinkedList<Question>();
+        Cursor cursor = database.query("test", allColumns, null, null, null, null, null);
+        while (cursor.moveToNext()) {
+            Question question = new Question();
+            question.setId(cursor.getInt(0));
+            question.setQuestion(cursor.getString(1));
+            question.setCorrectAnswer(cursor.getString(2));
+            question.setIncorrAns1(cursor.getString(3));
+            question.setIncorrAns2(cursor.getString(4));
+            question.setIncorrAns3(cursor.getString(5));
+            questions.add(question);
+        }
+        return questions.size();
+
     }
 
     public List<Question> findAll() {

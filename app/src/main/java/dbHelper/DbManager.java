@@ -46,8 +46,10 @@ public class DbManager extends SQLiteOpenHelper {
         db.execSQL(
                 "create table users (" +
                         "id integer primary key autoincrement," +
-                        "login text," +
-                        "password text);"
+                        "login text unique," +
+                        "email text uniquea," +
+                        "password text," +
+                        "score int);"
        );
 
         db.execSQL(

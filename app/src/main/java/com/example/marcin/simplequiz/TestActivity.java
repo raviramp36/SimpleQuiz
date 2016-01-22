@@ -1,5 +1,7 @@
 package com.example.marcin.simplequiz;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import dao.DaoQuestion;
+import dao.DaoUser;
 import model.Question;
 import model.User;
 
@@ -32,19 +35,36 @@ public class TestActivity extends AppCompatActivity {
     private List<Question> listOfQuestions;
     private ArrayList<String> listOfAnswers;
     private User user;
+    private int score;
+    private TextView tvNumOfQuestion;
+    private int numberOfActualQuestion;
+    private int totalQuestionNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
-        user = (User)getIntent().getSerializableExtra("user");
+        user = (User) getIntent().getSerializableExtra("user");
+        score = 0;
+        user.setScore(score);
 
-        tv = (TextView)findViewById(R.id.textView);
-        btn1 = (Button)findViewById(R.id.button);
-        btn2 = (Button)findViewById(R.id.button2);
-        btn3 = (Button)findViewById(R.id.button3);
-        btn4 = (Button)findViewById(R.id.button4);
+        DaoUser daoUser = new DaoUser(getApplicationContext());
+        try {
+            daoUser.open();
+        } catch (SQLException e) {
+
+        }
+
+        daoUser.updateUserScore(user);
+
+        tv = (TextView) findViewById(R.id.textView);
+        tvNumOfQuestion = (TextView) findViewById(R.id.numOfQuestion);
+        btn1 = (Button) findViewById(R.id.button);
+        btn2 = (Button) findViewById(R.id.button2);
+        btn3 = (Button) findViewById(R.id.button3);
+        btn4 = (Button) findViewById(R.id.button4);
+        numberOfActualQuestion = 0;
 
         DaoQuestion daoQuestion = new DaoQuestion(getApplicationContext());
 
@@ -56,7 +76,10 @@ public class TestActivity extends AppCompatActivity {
 
         listOfQuestions = daoQuestion.findAll();
 
-        if(listOfQuestions.size() != 0) {
+        totalQuestionNumber = listOfQuestions.size();
+        tvNumOfQuestion.setText(numberOfActualQuestion + "/" + totalQuestionNumber);
+
+        if (listOfQuestions.size() != 0 && numberOfActualQuestion <= listOfQuestions.size()) {
             Collections.shuffle(listOfQuestions);
             listOfAnswers = new ArrayList<>();
 
@@ -79,7 +102,7 @@ public class TestActivity extends AppCompatActivity {
             btn4.setEnabled(true);
 
         } else {
-            Toast.makeText(this, "There is no question now!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "There is no question now!", Toast.LENGTH_SHORT).show();
             btn1.setEnabled(false);
             btn2.setEnabled(false);
             btn3.setEnabled(false);
@@ -96,7 +119,7 @@ public class TestActivity extends AppCompatActivity {
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                checkAnswer((String) btn2.getText(),listOfQuestions);
+                checkAnswer((String) btn2.getText(), listOfQuestions);
             }
         });
 
@@ -116,35 +139,70 @@ public class TestActivity extends AppCompatActivity {
 
     }
 
-    public void checkAnswer(String string, List<Question> listOfQuestion){
+    public void checkAnswer(String string, List<Question> listOfQuestion) {
         String corrAnsw = listOfQuestion.get(iterator).getCorrectAnswer();
 
         listOfAnswers.removeAll(listOfAnswers);
 
-        if(corrAnsw.equals(string)){
+        if (corrAnsw.equals(string)) {
             iterator += 1;
-
-            Toast.makeText(this, "Good job bro!", Toast.LENGTH_LONG).show();
-
-            if(iterator >= listOfQuestion.size()){
-                iterator = 0;
-            }
+            score += 1;
 
         } else {
-            Toast.makeText(this, "Next time bro...", Toast.LENGTH_LONG).show();
+            iterator += 1;
+            score -= 1;
         }
 
-        listOfAnswers.add(listOfQuestions.get(iterator).getCorrectAnswer());
-        listOfAnswers.add(listOfQuestions.get(iterator).getIncorrAns1());
-        listOfAnswers.add(listOfQuestions.get(iterator).getIncorrAns2());
-        listOfAnswers.add(listOfQuestions.get(iterator).getIncorrAns3());
+        if (iterator >= listOfQuestion.size()) {
+            iterator = 0;
+            tv.setText("");
+            btn1.setText("");
+            btn2.setText("");
+            btn3.setText("");
+            btn4.setText("");
 
-        Collections.shuffle(listOfAnswers);
-        tv.setText(listOfQuestions.get(iterator).getQuestion());
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setMessage("This is end of the quiz\nYour score is = " + score);
+            alertDialogBuilder.setPositiveButton("okey", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
+                    user.setScore(score);
+                    DaoUser daoUser = new DaoUser(getApplicationContext());
+                    try {
+                        daoUser.open();
+                        daoUser.updateUserScore(user);
 
-        btn1.setText(listOfAnswers.get(0));
-        btn2.setText(listOfAnswers.get(1));
-        btn3.setText(listOfAnswers.get(2));
-        btn4.setText(listOfAnswers.get(3));
+                        Intent intentMain = new Intent(TestActivity.this,
+                                MainActivity.class);
+                        intentMain.putExtra("user", user);
+                        TestActivity.this.startActivity(intentMain);
+                        daoUser.close();
+                    } catch (SQLException e) {
+
+                    }
+
+                }
+            });
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+
+        } else {
+
+            numberOfActualQuestion += 1;
+            listOfAnswers.add(listOfQuestions.get(iterator).getCorrectAnswer());
+            listOfAnswers.add(listOfQuestions.get(iterator).getIncorrAns1());
+            listOfAnswers.add(listOfQuestions.get(iterator).getIncorrAns2());
+            listOfAnswers.add(listOfQuestions.get(iterator).getIncorrAns3());
+
+            Collections.shuffle(listOfAnswers);
+            tv.setText(listOfQuestions.get(iterator).getQuestion());
+            tvNumOfQuestion.setText(numberOfActualQuestion + "/" + totalQuestionNumber);
+
+            btn1.setText(listOfAnswers.get(0));
+            btn2.setText(listOfAnswers.get(1));
+            btn3.setText(listOfAnswers.get(2));
+            btn4.setText(listOfAnswers.get(3));
+        }
     }
 }

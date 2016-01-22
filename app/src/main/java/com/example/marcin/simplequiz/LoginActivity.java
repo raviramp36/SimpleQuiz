@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -29,8 +30,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-        mPasswordView = (EditText) findViewById(R.id.password);
+        mEmailView = (AutoCompleteTextView) findViewById(R.id.tvEmail);
+        mPasswordView = (EditText) findViewById(R.id.tvPassword);
 
         Button btnLogin = (Button) findViewById(R.id.email_sign_in_button);
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -44,7 +45,10 @@ public class LoginActivity extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptRegister();
+
+                Intent intentMain = new Intent(LoginActivity.this,
+                        RegisterActivity.class);
+                LoginActivity.this.startActivity(intentMain);
 
             }
         });
@@ -66,9 +70,9 @@ public class LoginActivity extends AppCompatActivity {
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
-        User user = new User();
-        user.setLogin(email);
-        user.setPassword(password);
+        User user2login = new User();
+        user2login.setLogin(email);
+        user2login.setPassword(password);
 
         boolean cancel = false;
         View focusView = null;
@@ -95,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
         try {
             daoUser.open();
         } catch (SQLException e) {
-            Toast.makeText(this, "Cannot open connection to database.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Cannot open connection to database.", Toast.LENGTH_SHORT).show();
         }
 
         if (cancel) {
@@ -103,18 +107,18 @@ public class LoginActivity extends AppCompatActivity {
         } else {
 
             if (!daoUser.checkUser(email)) {
-                User userToLogin = daoUser.getUser(email);
-                if(userToLogin.getPassword().equals(user.getPassword())){
+                User user = daoUser.getUser(email);
+                if (user.getPassword().equals(user2login.getPassword())) {
                     Intent intentMain = new Intent(LoginActivity.this,
                             MainActivity.class);
-                    intentMain.putExtra("user", userToLogin);
+                    intentMain.putExtra("user", user);
                     LoginActivity.this.startActivity(intentMain);
-                    Toast.makeText(this, "Successfull loged in.", Toast.LENGTH_LONG).show();
-                }else{
-                    Toast.makeText(this, "Wrong login or password.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Successfull loged in.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Wrong login or password.", Toast.LENGTH_SHORT).show();
                 }
-            }else{
-                Toast.makeText(this, "There is no user registered with that login.", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "There is no user registered with that login.", Toast.LENGTH_SHORT).show();
             }
 
         }
@@ -164,7 +168,7 @@ public class LoginActivity extends AppCompatActivity {
         try {
             daoUser.open();
         } catch (SQLException e) {
-            Toast.makeText(this, "Cannot open connection to database.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Cannot open connection to database.", Toast.LENGTH_SHORT).show();
         }
 
         if (cancel) {
@@ -173,13 +177,13 @@ public class LoginActivity extends AppCompatActivity {
 
             if (daoUser.checkUser(email)) {
                 if (daoUser.createUser(user)) {
-                    Toast.makeText(this, "User successfull created!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "User successfull created!", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(this, "Not today!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Not today!", Toast.LENGTH_SHORT).show();
                 }
 
-            }else{
-                Toast.makeText(this, "User already exist in database.", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "User already exist in database.", Toast.LENGTH_SHORT).show();
             }
 
         }

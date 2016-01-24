@@ -150,7 +150,7 @@ public class TestActivity extends AppCompatActivity {
 
         } else {
             iterator += 1;
-            score -= 1;
+            score += 0;
         }
 
         if (iterator >= listOfQuestion.size()) {

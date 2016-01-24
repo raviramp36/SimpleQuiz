@@ -103,16 +103,16 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         // Check for a valid email address.
-        if (TextUtils.isEmpty(email) && isEmailValid(email)) {
+        if (TextUtils.isEmpty(email)) {
             etEmail.setError(getString(R.string.error_field_required));
             focusView = etEmail;
             cancel = true;
         }
-//        } else if (!isEmailValid(email)) {
-//            mEmailView.setError(getString(R.string.error_invalid_email));
-//            focusView = mEmailView;
-//            cancel = true;
-//        }
+         else if (!isEmailValid(email)) {
+            etEmail.setError(getString(R.string.error_invalid_email));
+            focusView = etEmail;
+            cancel = true;
+        }
 
         try {
             daoUser.open();
